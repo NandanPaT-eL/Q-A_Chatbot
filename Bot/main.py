@@ -1,4 +1,3 @@
-# main.py
 import os
 import re
 import shutil
@@ -8,6 +7,7 @@ from typing import List
 
 from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
+from dotenv import load_dotenv  # ✅ Add this line
 
 from langchain_community.document_loaders import Docx2txtLoader, PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -17,37 +17,46 @@ from langchain_groq.chat_models import ChatGroq
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema.runnable import RunnableLambda
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+from fastapi.middleware.cors import CORSMiddleware
 
 # ==============================
-# Environment & warnings
+# Environment Setup
 # ==============================
+load_dotenv()  # ✅ Load .env file automatically
+
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
-os.environ["GROQ_API_KEY"] = "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"
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
 
+# ✅ Fetch secrets from .env
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+HUGGINGFACE_API_TOKEN = os.getenv("HUGGINGFACE_API_TOKEN")
+
+if not GROQ_API_KEY or not HUGGINGFACE_API_TOKEN:
+    raise ValueError("❌ Missing API credentials! Check your .env file.")
+
+os.environ["GROQ_API_KEY"] = GROQ_API_KEY
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACE_API_TOKEN
+
+# Suppress warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 # ==============================
 # FastAPI App
 # ==============================
-from fastapi.middleware.cors import CORSMiddleware
-
 app = FastAPI(title="📖 Student Book Q&A Chatbot Backend")
 
-# Add this **before your routes**
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or ["http://localhost:3000"] for React dev
+    allow_origins=["*"],  # change to ["http://localhost:3000"] for local React
     allow_credentials=True,
-    allow_methods=["*"],  # Allow POST, GET, OPTIONS, etc.
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # ==============================
-# Global storage
+# Globals
 # ==============================
-chat_history: List[tuple] = []  # store in English
+chat_history: List[tuple] = []
 rag_chain = None
 
 # ==============================
@@ -95,14 +104,10 @@ def translate_text(text, source_lang, target_lang):
         return text
 
 def translate_to_en(text, source_lang):
-    if source_lang == "English":
-        return text
-    return translate_text(text, source_lang, "English")
+    return text if source_lang == "English" else translate_text(text, source_lang, "English")
 
 def translate_from_en(text, target_lang):
-    if target_lang == "English":
-        return text
-    return translate_text(text, "English", target_lang)
+    return text if target_lang == "English" else translate_text(text, "English", target_lang)
 
 # ==============================
 # Helper Functions
@@ -116,15 +121,10 @@ def format_history():
 def build_rag_chain(file_path):
     global rag_chain
 
-    if file_path.endswith(".docx"):
-        loader = Docx2txtLoader(file_path)
-    elif file_path.endswith(".pdf"):
-        loader = PyPDFLoader(file_path)
-    else:
-        raise ValueError("Only PDF or DOCX supported.")
-
+    loader = Docx2txtLoader(file_path) if file_path.endswith(".docx") else PyPDFLoader(file_path)
     documents = loader.load()
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=500, length_function=len)
+
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=500)
     splits = text_splitter.split_documents(documents)
 
     embedding_function = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
@@ -200,28 +200,22 @@ async def ask_question(req: QuestionRequest):
     if rag_chain is None:
         return {"error": "No book uploaded yet."}
 
-    question_en = translate_to_en(req.question, req.language) if req.language != "English" else req.question
+    question_en = translate_to_en(req.question, req.language)
 
-    # Casual message handling
     casual_patterns = {
         r"\b(hello|hi|hey)\b": "Hello! 👋 Ask me anything about the book.",
         r"\b(thank you|thanks|tysm|thx)\b": "You're welcome! Happy studying 📚",
         r"\b(bye|goodbye|see you|exit|quit|farewell)\b": "Goodbye 👋 Come back anytime!"
     }
-    answer_en = None
-    for pattern, response in casual_patterns.items():
-        if re.search(pattern, question_en.lower()):
-            answer_en = response
-            break
 
-    # Use RAG chain if not casual
-    if answer_en is None:
+    answer_en = next((resp for pat, resp in casual_patterns.items() if re.search(pat, question_en.lower())), None)
+
+    if not answer_en:
         answer_en = rag_chain.invoke({
             "question": question_en,
             "history": format_history()
         }).content
 
-    answer_display = translate_from_en(answer_en, req.language) if req.language != "English" else answer_en
-
+    answer_display = translate_from_en(answer_en, req.language)
     chat_history.append((question_en, answer_en))
     return {"answer": answer_display, "history": chat_history}
