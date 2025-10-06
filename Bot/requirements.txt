@@ -1,0 +1,13 @@
+streamlit>=1.30.0
+langchain>=0.1.0
+langchain-community>=0.0.200
+transformers>=4.40.0
+sentencepiece>=0.1.99
+torch>=2.1.0
+huggingface-hub>=0.17.0
+chromadb>=0.3.33
+langchain-groq>=0.0.30
+protobuf>=4.23.4
+accelerate>=0.23.0
+pypdf
+sentence-transformers

@@ -1,20 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="be4e8efe-1c4e-46e2-add7-2d97135b0459" name="Changes" comment="" />
+    <list default="true" id="be4e8efe-1c4e-46e2-add7-2d97135b0459" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Bot/hello.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Bot/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Bot/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/api.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/ChatBubble.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/ChatInput.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/FileUploader.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/LanguageSelector.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pythonProject1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject1.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Bot/.gitignore" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "NandanPaT-eL"
+  }
 }]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/NandanPaT-eL/Q-A_Chatbot.git",
+    "accountId": "d6a4734c-9bc8-454c-b7db-32a66be0090f"
+  }
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="30iGBaOStWfVQwitknPETTtKS4g" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.hello.executor": "Run",
+    "Python.name.executor": "Run",
+    "Python.preprocessing.executor": "Run",
+    "Python.query.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/nandanpatel/Desktop/Q&A Chatbot"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/frontend/Bot" />
+    </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
